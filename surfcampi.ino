@@ -20,12 +20,6 @@
 #include <DS1374RTC.h>
 #include <Wire.h>
 
-#define ALRM1_MATCH_SEC        0b1110  // when seconds match
-#define ALRM1_MATCH_MIN_SEC    0b1100  // when minutes and seconds match
-
-#define ALRM2_ONCE_PER_MIN     0b111   // once per minute (00 seconds of every minute)
-#define ALRM2_MATCH_MIN        0b110   // when minutes match
-
 //Variables for dealing with date conversions
 tmElements_t tm;
 const int utcOffsetHoursDT = 9;
@@ -67,8 +61,7 @@ void loop() {
   attachInterrupt(0, alarm_isr, FALLING);		// Alarm pin
 
   SleepyPi.enableWakeupAlarm();
-  //SleepyPi.setAlarm(60);              // in seconds
-  SleepyPi.setAlarm(ALRM1_MATCH_SEC, 0); 
+  SleepyPi.setAlarm(600);              // in seconds
   // Enter power down state with ADC and BOD module disabled.
   // Wake up when wake up pin is low.
   SleepyPi.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF); 
