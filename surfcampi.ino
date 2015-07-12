@@ -61,7 +61,7 @@ void loop() {
   attachInterrupt(0, alarm_isr, FALLING);		// Alarm pin
 
   SleepyPi.enableWakeupAlarm();
-  SleepyPi.setAlarm(600);              // in seconds
+  SleepyPi.setAlarm(1800);              // in seconds
   // Enter power down state with ADC and BOD module disabled.
   // Wake up when wake up pin is low.
   SleepyPi.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF); 
