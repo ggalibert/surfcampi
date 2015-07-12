@@ -1,4 +1,5 @@
 #!/bin/bash
+date
 git pull
 ./collectPictures.sh
 animatedFile=`./createAnimatedGif.sh`
