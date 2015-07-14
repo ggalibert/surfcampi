@@ -1,4 +1,5 @@
 #!/bin/bash
+./setTime.sh
 date
 git pull
 ./collectPictures.sh
