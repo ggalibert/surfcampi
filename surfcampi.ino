@@ -20,7 +20,7 @@
 #include <DS1374RTC.h>
 #include <Wire.h>
 
-//Variables for dealing with date conversions
+//Variables for dealing with time
 tmElements_t tm;
 const int utcOffsetHoursDT = 9;
 const int utcOffsetHoursST = 10;
@@ -61,7 +61,7 @@ void loop() {
   attachInterrupt(0, alarm_isr, FALLING);		// Alarm pin
 
   SleepyPi.enableWakeupAlarm();
-  SleepyPi.setAlarm(3600);              // in seconds
+  SleepyPi.setAlarm(60);              // in seconds
   // Enter power down state with ADC and BOD module disabled.
   // Wake up when wake up pin is low.
   SleepyPi.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF); 
@@ -74,12 +74,16 @@ void loop() {
   if (RTC.readTime(tm)) {
     piIsRunning = SleepyPi.checkPiStatus(false);
     int crtHour = getCrtHourUsingOffset();
+    int crtMin = getCrtMin();
     
-    Serial.print("Current time is ");
+    Serial.print("Current hour is ");
     Serial.println(crtHour);
     
+    Serial.print("Current minute is ");
+    Serial.println(crtMin);
+    
     //Determine if the pi should be on or off
-    if (crtHour >= startupHour && crtHour < shutdownHour) {
+    if (crtHour >= startupHour && crtHour < shutdownHour && crtMin == 0) {
       piShouldBeOn = true;
     } else {
       piShouldBeOn = false;
@@ -161,7 +165,7 @@ unsigned int getCrtOffset() {
 int getCrtHourUsingOffset() {
   //Time is returned in UTC so we must convert
   int crtHour;
-  int utcHour = tm.Hour; //tm.Hour or manual for debugging
+  int utcHour = tm.Hour;
   int crtOffset = getCrtOffset();
   int crtUtcHour = utcHour + (crtOffset);
   
@@ -173,4 +177,10 @@ int getCrtHourUsingOffset() {
   }
   
   return crtHour;
+}
+
+int getCrtMin() {
+  int crtMin = tm.Minute;
+  
+  return crtMin;
 }
