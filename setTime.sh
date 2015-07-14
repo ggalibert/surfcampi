@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "ds1374 0x68" > /sys/class/i2c-adapter/i2c-1/new_device
+/bin/bash "echo ds1374 0x68 > /sys/class/i2c-adapter/i2c-1/new_device"
  
 # Check for an IP address
 _IP=$(hostname -I) || true
