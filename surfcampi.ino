@@ -89,12 +89,7 @@ void loop() {
       Serial.println("Pi is NOT running!");
     }
     
-    if (piIsRunning == true && piShouldBeOn == false) {
-      //Time to turn off
-      Serial.println("Turning Pi off!");
-      delay(200); //Give it time to print before going down
-      SleepyPi.piShutdown(true);
-    } else if (piIsRunning == false && piShouldBeOn == true) {
+    if (piIsRunning == false && piShouldBeOn == true) {
       //Time to turn on
       Serial.println("Turning Pi on!"); 
       SleepyPi.enablePiPower(true);
@@ -105,13 +100,6 @@ void loop() {
       Serial.println("Turning power off!");
       delay(10000); //Give it time to shut down before cutting power
       SleepyPi.enablePiPower(false);
-    } else if (piIsRunning == false && piShouldBeOn == false) {
-      //powerDown saves more juice than idle, but we have to leave
-      //ADC_ON or else the wakeup will cause a startup of the Pi if off.
-      Serial.println("All good, back into deep sleep!");
-    } else {
-      //Pi is operating as it should be, sleep and check again shortly
-      Serial.println("All good, back into deep sleep!");
     }
   } else {
     if (RTC.chipPresent()) {
