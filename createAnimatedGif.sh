@@ -1,5 +1,6 @@
 #!/bin/bash
-hour=`date +%H`
-convert -delay 10 -loop 0 /tmp/surfcampi_*.jpg /tmp/surfcampi_$hour.gif
-echo /tmp/surfcampi_$hour.gif
+hour=$1
+outputFile=/tmp/surfcampi_$hour.gif
+convert -delay 30 -loop 0 /tmp/surfcampi_*.jpg $outputFile
+echo $outputFile
 exit 0
