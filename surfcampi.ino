@@ -22,8 +22,8 @@
 
 //Variables for dealing with time
 tmElements_t tm;
-const int startupHour = 7; //sunrise 7
-const int shutdownHour = 19; //sunset 19
+const int startupHour = 6;
+const int shutdownHour = 18;
 boolean piShouldBeOn;
 boolean piIsRunning;
 
@@ -98,12 +98,12 @@ void loop() {
       //Time to turn on
       Serial.println("Turning Pi on!"); 
       SleepyPi.enablePiPower(true);
-      delay(60000); //hold to boot in ms
+      delay(60000); //give it time to boot before start checking status
       while(SleepyPi.checkPiStatus(false)){
-        delay(10000); //hold to shutdown in ms
+        delay(10000); //checking status every 10sec
       }
       Serial.println("Turning power off!");
-      delay(200); //Give it time to print before going down
+      delay(10000); //Give it time to shut down before cutting power
       SleepyPi.enablePiPower(false);
     } else if (piIsRunning == false && piShouldBeOn == false) {
       //powerDown saves more juice than idle, but we have to leave
