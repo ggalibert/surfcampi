@@ -1,5 +1,5 @@
 # surfcampi
-surfcam with raspberry pi project.
+surfcam project with raspberry pi and sleepy pi.
 
 Makes use of :
 -raspistill
