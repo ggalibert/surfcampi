@@ -22,6 +22,13 @@
 
 //Variables for dealing with time
 tmElements_t tm;
+const int utcOffsetHoursDT = 9;
+const int utcOffsetHoursST = 10;
+const int dtStartMonth = 4;
+const int dtStartDay = 5;
+const int dtEndMonth = 10;
+const int dtEndDay = 4;
+
 const int startupHour = 6;
 const int shutdownHour = 18;
 boolean piShouldBeOn;
@@ -66,7 +73,7 @@ void loop() {
   // Example: Read sensor, data logging, data transmission.
   if (RTC.readTime(tm)) {
     piIsRunning = SleepyPi.checkPiStatus(false);
-    int crtHour = tm.Hour;
+    int crtHour = getCrtHourUsingOffset();
     int crtMin = tm.Minute;
     
     Serial.print("Current hour is ");
@@ -111,4 +118,51 @@ void loop() {
     }
     delay(10000); //Give it a few secs before trying again
   }
+}
+
+//Try to get the right offset based on what we know about daylight vs standard time.
+//Note: not perfect, but pretty close.  Might be slightly off the day of time changes.
+unsigned int getCrtOffset() {
+  int crtMonth = tm.Month;
+  int crtDay = tm.Day;
+  unsigned int offset = 0;
+  if (crtMonth > dtStartMonth && crtMonth < dtEndMonth) {
+    //We are in between months so no need to check the day
+    offset = utcOffsetHoursST;
+  } else if (crtMonth == dtStartMonth) {
+    //We have matched the start month, check the day
+    if (crtDay >= dtStartDay) {
+      offset = utcOffsetHoursST;
+    } else {
+      offset = utcOffsetHoursDT;
+    }
+  } else if (crtMonth == dtEndMonth) {
+    //We have matched the end month, check the day
+    if (crtDay <= dtEndDay) {
+      offset = utcOffsetHoursST;
+    } else {
+      offset = utcOffsetHoursDT;
+    }
+  } else {
+    offset = utcOffsetHoursDT;
+  }
+  
+  return offset;
+}
+
+int getCrtHourUsingOffset() {
+  //Time is returned in UTC so we must convert
+  int crtHour;
+  int utcHour = tm.Hour; //tm.Hour or manual for debugging
+  int crtOffset = getCrtOffset();
+  int crtUtcHour = utcHour + (crtOffset);
+  
+  //We must account for negatives
+  if (crtUtcHour <= 0) {
+    crtHour = 24 - abs(crtUtcHour);
+  } else {
+    crtHour = crtUtcHour;
+  }
+  
+  return crtHour;
 }
