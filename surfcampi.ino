@@ -32,7 +32,21 @@ const int shutdownHour = 18;
 boolean piShouldBeOn;
 boolean piIsRunning;
 
+const int LED_PIN = 13;
+
+void alarm_isr()
+{
+    // Just a handler for the alarm interrupt.
+    // You could do something here
+
+}
+
 void setup() {
+  // Configure "Standard" LED pin
+  pinMode(LED_PIN, OUTPUT);		
+  digitalWrite(LED_PIN,LOW);		// Switch off LED
+  
+  // initialize serial communication: In Arduino IDE use "Serial Monitor"
   Serial.begin(9600);
   
   //Set the initial Power to be off
@@ -41,6 +55,21 @@ void setup() {
 }
 
 void loop() {
+  // Allow wake up alarm to trigger interrupt on falling edge.
+  attachInterrupt(0, alarm_isr, FALLING);		// Alarm pin
+
+  SleepyPi.enableWakeupAlarm();
+  SleepyPi.setAlarm(60);              // in seconds
+  // Enter power down state with BOD module disabled.
+  // Wake up when wake up pin is low.
+  delay(200); //Give it time to print before going idle
+  SleepyPi.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF); 
+    
+  // Disable external pin interrupt on wake up pin.
+  detachInterrupt(0); 
+    
+  // Do something here
+  // Example: Read sensor, data logging, data transmission.
   if (RTC.readTime(tm)) {
     piIsRunning = SleepyPi.checkPiStatus(false);
     int utcHour = tm.Hour;
