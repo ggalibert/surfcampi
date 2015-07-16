@@ -40,6 +40,6 @@ else
 fi
 
 # shutdown surfcampi
-#sudo halt
+sudo halt
 
 exit 0
