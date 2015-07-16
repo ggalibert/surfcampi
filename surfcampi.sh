@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# connect to 3G
+#sudo ./sakis3g connect
+
 # set RTC time from system time if connected to network
 # otherwise set system time from RTC.
 sudo ./setTime.sh
@@ -38,6 +41,9 @@ else
   # surfcampi does nothing for 3min in case we want to ssh it
   sleep 180
 fi
+
+# disconnect from 3G
+#sudo ./sakis3g disconnect
 
 # shutdown surfcampi
 sudo halt
