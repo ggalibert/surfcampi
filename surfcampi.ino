@@ -16,71 +16,51 @@
 
 #include "SleepyPi.h"
 #include <Time.h>
+#include <Timezone.h>
 #include <LowPower.h>
 #include <DS1374RTC.h>
 #include <Wire.h>
 
 //Variables for dealing with time
 tmElements_t tm;
-const int utcOffsetHoursDT = 9;
-const int utcOffsetHoursST = 10;
-const int dtStartMonth = 4;
-const int dtStartDay = 5;
-const int dtEndMonth = 10;
-const int dtEndDay = 4;
+TimeChangeRule myEDT = {"EDT", First, Sun, Oct, 2, 540};  //UTC + 9 hours
+TimeChangeRule myEST = {"EST", First, Sun, Apr, 2, 600};   //UTC + 10 hours
+Timezone myTz(myEDT, myEST);
 
-const int startupHour = 6;
+const int startupHour = 6; // in local time
 const int shutdownHour = 18;
 boolean piShouldBeOn;
 boolean piIsRunning;
 
-const int LED_PIN = 13;
-
-void alarm_isr()
-{
-    // Just a handler for the alarm interrupt.
-    // You could do something here
-
-}
-
 void setup() {
-  // Configure "Standard" LED pin
-  pinMode(LED_PIN, OUTPUT);		
-  digitalWrite(LED_PIN,LOW);		// Switch off LED
-  
-  // initialize serial communication: In Arduino IDE use "Serial Monitor"
   Serial.begin(9600);
   
-  //Set the initial Power to be false
+  //Set the initial Power to be off
   SleepyPi.enablePiPower(false);  
   SleepyPi.enableExtPower(false); //expansion pins
 }
 
 void loop() {
-  // Allow wake up alarm to trigger interrupt on falling edge.
-  attachInterrupt(0, alarm_isr, FALLING);		// Alarm pin
-
-  SleepyPi.enableWakeupAlarm();
-  SleepyPi.setAlarm(60);              // in seconds
-  // Enter power down state with ADC and BOD module disabled.
-  // Wake up when wake up pin is low.
-  SleepyPi.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF); 
-    
-  // Disable external pin interrupt on wake up pin.
-  detachInterrupt(0); 
-    
-  // Do something here
-  // Example: Read sensor, data logging, data transmission.
   if (RTC.readTime(tm)) {
     piIsRunning = SleepyPi.checkPiStatus(false);
-    int crtHour = getCrtHourUsingOffset();
+    int utcHour = tm.Hour;
     int crtMin = tm.Minute;
     
-    Serial.print("Current hour is ");
-    Serial.println(crtHour);
+    Serial.print("Current time is ");
+    Serial.print(utcHour);
+    Serial.print(":");
+    Serial.print(crtMin);
+    Serial.println(" UTC");
     
-    Serial.print("Current minute is ");
-    Serial.println(crtMin);
+    time_t utc = makeTime(tm);
+    time_t local = myTz.toLocal(utc);
+    int crtHour = hour(local);
+
+    Serial.print("Current time is ");
+    Serial.print(crtHour);
+    Serial.print(":");
+    Serial.print(crtMin);
+    Serial.println(" Z");
     
     //Determine if the pi should be on or off
     if (crtHour >= startupHour && crtHour < shutdownHour && crtMin == 0) {
@@ -100,7 +80,7 @@ void loop() {
       //Time to turn on
       Serial.println("Turning Pi on!"); 
       SleepyPi.enablePiPower(true);
-      delay(60000); //give it time to boot before start checking status
+      delay(60000); //hold for boot
       while(SleepyPi.checkPiStatus(false)){
         delay(10000); //checking status every 10sec
       }
@@ -118,51 +98,4 @@ void loop() {
     }
     delay(10000); //Give it a few secs before trying again
   }
-}
-
-//Try to get the right offset based on what we know about daylight vs standard time.
-//Note: not perfect, but pretty close.  Might be slightly off the day of time changes.
-unsigned int getCrtOffset() {
-  int crtMonth = tm.Month;
-  int crtDay = tm.Day;
-  unsigned int offset = 0;
-  if (crtMonth > dtStartMonth && crtMonth < dtEndMonth) {
-    //We are in between months so no need to check the day
-    offset = utcOffsetHoursST;
-  } else if (crtMonth == dtStartMonth) {
-    //We have matched the start month, check the day
-    if (crtDay >= dtStartDay) {
-      offset = utcOffsetHoursST;
-    } else {
-      offset = utcOffsetHoursDT;
-    }
-  } else if (crtMonth == dtEndMonth) {
-    //We have matched the end month, check the day
-    if (crtDay <= dtEndDay) {
-      offset = utcOffsetHoursST;
-    } else {
-      offset = utcOffsetHoursDT;
-    }
-  } else {
-    offset = utcOffsetHoursDT;
-  }
-  
-  return offset;
-}
-
-int getCrtHourUsingOffset() {
-  //Time is returned in UTC so we must convert
-  int crtHour;
-  int utcHour = tm.Hour; //tm.Hour or manual for debugging
-  int crtOffset = getCrtOffset();
-  int crtUtcHour = utcHour + (crtOffset);
-  
-  //We must account for negatives
-  if (crtUtcHour <= 0) {
-    crtHour = 24 - abs(crtUtcHour);
-  } else {
-    crtHour = crtUtcHour;
-  }
-  
-  return crtHour;
 }
