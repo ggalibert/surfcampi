@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# wait for wifi to set up
+sleep 60
+
 # connect to 3G
 #echo "connecting to 3G"
 #sudo ./sakis3g connect
