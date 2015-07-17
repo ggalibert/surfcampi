@@ -38,8 +38,8 @@ if [ $isWorkingHour = 1 ]; then
   # upload animated gif to FTP
   ./uploadToFTP.sh $animatedFile
 else
-  # surfcampi does nothing for 3min in case we want to ssh it
-  sleep 180
+  # surfcampi does nothing for 1min in case we want to ssh it
+  sleep 60
 fi
 
 # disconnect from 3G
