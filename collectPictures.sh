@@ -9,9 +9,11 @@ timeLapseRate=10000
 timeLapseLength=50000
 
 # perform a time lapse of 6 pictures every 10sec with no preview
+echo "performing timelapse"
 raspistill -n -w $pictureWidth -h $pictureHeight -q $jpegQuality -o $outputFile -tl $timeLapseRate -t $timeLapseLength
 
 # add annotation to pictures
+echo "annotate pictures"
 outputFiles=(`echo /tmp/surfcampi_*.jpg`)
 for file in "${outputFiles[@]}"
 do

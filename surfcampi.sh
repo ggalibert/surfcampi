@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # connect to 3G
+#echo "connecting to 3G"
 #sudo ./sakis3g connect
 
 # set RTC time from system time if connected to network
@@ -33,16 +34,19 @@ if [ $isWorkingHour = 1 ]; then
   ./collectPictures.sh
 
   # run script to create an animated gif from the collected pictures
+  echo "creating animated gif"
   animatedFile=`./createAnimatedGif.sh $hour`
 
   # upload animated gif to FTP
   ./uploadToFTP.sh $animatedFile
 else
   # surfcampi does nothing for 1min in case we want to ssh it
+  echo "surfcampi does not have anything to do. Waiting doing nothing for a 1min."
   sleep 60
 fi
 
 # disconnect from 3G
+#echo "disconnecting from 3G"
 #sudo ./sakis3g disconnect
 
 # shutdown surfcampi
