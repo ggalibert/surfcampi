@@ -109,7 +109,7 @@ void loop() {
       //Time to turn on
       Serial.println("Turning Pi on!"); 
       SleepyPi.enablePiPower(true);
-      delay(60000); //hold for boot
+      delay(120000); //hold for boot
       while(SleepyPi.checkPiStatus(false)){
         delay(10000); //checking status every 10sec
       }
