@@ -72,6 +72,12 @@ void loop() {
   // Example: Read sensor, data logging, data transmission.
   if (RTC.readTime(tm)) {
     piIsRunning = SleepyPi.checkPiStatus(false);
+    if (piIsRunning == true) {
+      Serial.println("Pi is running!");
+    } else {
+      Serial.println("Pi is NOT running!");
+    }
+
     int utcHour = tm.Hour;
     int crtMin = tm.Minute;
     
@@ -93,16 +99,11 @@ void loop() {
     
     //Determine if the pi should be on or off
     if (crtHour >= startupHour && crtHour < shutdownHour && crtMin == 0) {
+      Serial.println("Pi should be on!");
       piShouldBeOn = true;
     } else {
+      Serial.println("Pi should be off!");
       piShouldBeOn = false;
-    }
-    
-    //Helps with debugging
-    if (piIsRunning == true) {
-      Serial.println("Pi is running!");
-    } else {
-      Serial.println("Pi is NOT running!");
     }
     
     if (piIsRunning == false && piShouldBeOn == true) {
@@ -111,6 +112,7 @@ void loop() {
       SleepyPi.enablePiPower(true);
       delay(120000); //hold for boot
       while(SleepyPi.checkPiStatus(false)){
+        Serial.println("Pi is still running"); 
         delay(10000); //checking status every 10sec
       }
       Serial.println("Turning power off!");
