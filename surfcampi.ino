@@ -28,7 +28,7 @@ TimeChangeRule myEST = {"EST", First, Sun, Apr, 2, 600};   //UTC + 10 hours
 Timezone myTz(myEDT, myEST);
 
 const int startupHour = 6; // in local time
-const int shutdownHour = 18;
+const int shutdownHour = 24;
 boolean piShouldBeOn;
 boolean piIsRunning;
 
@@ -98,7 +98,7 @@ void loop() {
     Serial.println(" Z");
     
     //Determine if the pi should be on or off
-    if (crtHour >= startupHour && crtHour < shutdownHour && crtMin == 0) {
+    if (crtHour >= startupHour && crtHour < shutdownHour) {
       Serial.println("Pi should be on!");
       piShouldBeOn = true;
     } else {
@@ -118,6 +118,8 @@ void loop() {
       Serial.println("Turning power off!");
       delay(10000); //Give it time to shut down before cutting power
       SleepyPi.enablePiPower(false);
+    } else {
+      Serial.println("Going back to sleep");
     }
   } else {
     if (RTC.chipPresent()) {
