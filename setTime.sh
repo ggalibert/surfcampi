@@ -1,7 +1,9 @@
 #!/bin/bash
-i2cdetect -y 1 &> /dev/null
+modprobe i2c-bcm2708 
+modprobe i2c-dev
+i2cdetect -y 1
 modprobe rtc-ds1374
-sudo /bin/bash "echo ds1374 0x68 > /sys/class/i2c-adapter/i2c-1/new_device" &> /dev/null
+sudo /bin/bash "echo ds1374 0x68 > /sys/class/i2c-adapter/i2c-1/new_device"
  
 # Check for an IP address
 _IP=$(hostname -I) || true
