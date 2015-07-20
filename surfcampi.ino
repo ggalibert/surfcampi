@@ -28,7 +28,7 @@ TimeChangeRule myEST = {"EST", First, Sun, Apr, 2, 600};   //UTC + 10 hours
 Timezone myTz(myEDT, myEST);
 
 const int startupHour = 6; // in local time
-const int shutdownHour = 24;
+const int shutdownHour = 18;
 boolean piShouldBeOn;
 boolean piIsRunning;
 
@@ -59,7 +59,7 @@ void loop() {
   attachInterrupt(0, alarm_isr, FALLING);		// Alarm pin
 
   SleepyPi.enableWakeupAlarm();
-  SleepyPi.setAlarm(60);              // in seconds
+  SleepyPi.setAlarm(59);              // in seconds
   // Enter power down state with BOD module disabled.
   // Wake up when wake up pin is low.
   delay(200); //Give it time to print before going idle
@@ -98,7 +98,7 @@ void loop() {
     Serial.println(" Z");
     
     //Determine if the pi should be on or off
-    if (crtHour >= startupHour && crtHour < shutdownHour && crtMin == 40) {
+    if (crtHour >= startupHour && crtHour < shutdownHour && crtMin == 0) {
       Serial.println("Pi should be on!");
       piShouldBeOn = true;
     } else {
