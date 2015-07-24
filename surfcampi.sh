@@ -1,15 +1,10 @@
 #!/bin/bash
 
-# wait for wifi to set up
-sleep 60
+echo " "
 
 # connect to 3G
 #echo "connecting to 3G"
 #sudo ./sakis3g connect
-
-# set RTC time from system time if connected to network
-# otherwise set system time from RTC.
-sudo ./setTime.sh
 
 # print current date time
 date
