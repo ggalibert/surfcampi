@@ -62,7 +62,7 @@ void loop() {
   SleepyPi.setAlarm(59);              // in seconds
   // Enter power down state with BOD module disabled.
   // Wake up when wake up pin is low.
-  delay(200); //Give it time to print before going idle
+  delay(500); //Give it time to print before going idle
   SleepyPi.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF); 
     
   // Disable external pin interrupt on wake up pin.
@@ -118,9 +118,11 @@ void loop() {
       Serial.println("Turning power off!");
       delay(5000); //Give it time to shut down before cutting power
       SleepyPi.enablePiPower(false);
-    } else {
-      Serial.println("Going back to sleep");
+    } else if (piIsRunning == false && piShouldBeOn == false) {
+      Serial.println("Force power off. Going back to sleep");
       SleepyPi.enablePiPower(false); //we make sure power is off
+    } else {
+      Serial.println("All good. Going back to sleep");
     }
   } else {
     if (RTC.chipPresent()) {
