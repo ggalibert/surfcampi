@@ -98,7 +98,7 @@ void loop() {
     Serial.println(" Z");
     
     //Determine if the pi should be on or off
-    if (crtHour >= startupHour && crtHour < shutdownHour && crtMin == 0) {
+    if (crtHour >= startupHour && crtHour <= shutdownHour && crtMin == 0) {
       Serial.println("Pi should be on!");
       piShouldBeOn = true;
     } else {
