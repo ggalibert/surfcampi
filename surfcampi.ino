@@ -116,10 +116,11 @@ void loop() {
         delay(10000); //checking status every 10sec
       }
       Serial.println("Turning power off!");
-      delay(10000); //Give it time to shut down before cutting power
+      delay(5000); //Give it time to shut down before cutting power
       SleepyPi.enablePiPower(false);
     } else {
       Serial.println("Going back to sleep");
+      SleepyPi.enablePiPower(false); //we make sure power is off
     }
   } else {
     if (RTC.chipPresent()) {
