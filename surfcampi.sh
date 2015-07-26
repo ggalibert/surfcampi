@@ -50,6 +50,9 @@ fi
 #echo "disconnecting from 3G"
 #sudo ./sakis3g disconnect
 
+# print current date time
+date
+
 # shutdown surfcampi
 sudo halt
 
