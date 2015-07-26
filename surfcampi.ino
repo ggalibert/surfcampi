@@ -116,7 +116,7 @@ void loop() {
         delay(10000); //checking status every 10sec
       }
       Serial.println("Turning power off!");
-      delay(5000); //Give it time to shut down before cutting power
+      delay(10000); //Give it time to shut down before cutting power
       SleepyPi.enablePiPower(false);
     } else if (piIsRunning == false && piShouldBeOn == false) {
       Serial.println("Force power off. Going back to sleep");
