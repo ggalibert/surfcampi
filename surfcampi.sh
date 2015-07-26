@@ -6,6 +6,9 @@ echo " "
 #echo "connecting to 3G"
 #sudo ./sakis3g connect
 
+# set RTC time to internet time if connection
+./setTime.sh
+
 # print current date time
 date
 
