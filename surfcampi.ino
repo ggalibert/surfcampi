@@ -70,6 +70,7 @@ void loop() {
     
   // Do something here
   // Example: Read sensor, data logging, data transmission.
+  digitalWrite(LED_PIN,HIGH);		// Sleepy pi awake
   if (RTC.readTime(tm)) {
     piIsRunning = SleepyPi.checkPiStatus(false);
     if (piIsRunning == true) {
@@ -134,4 +135,6 @@ void loop() {
     }
     delay(10000); //Give it a few secs before trying again
   }
+  delay(400);
+  digitalWrite(LED_PIN,LOW);		// sleepy pi back to sleep
 }
