@@ -7,13 +7,13 @@ _HOSTNAME=$(hostname) || true
  
 if [ "$_IP" ]; then
     # We have a network, set the RTC from the system time.
-    printf "\nSetting hardware clock from system time\n"
+    printf "Setting hardware clock from system time\n"
     /sbin/hwclock -wu
  
-    printf "\n%s IP address is %s\n" "$_HOSTNAME" "$_IP"
+    printf "%s IP address is %s\n" "$_HOSTNAME" "$_IP"
 else
     # No network, set the system time from the RTC
-    printf "\nSetting system time from hardware clock\n"
+    printf "Setting system time from hardware clock\n"
     /sbin/hwclock -s
 fi
 
