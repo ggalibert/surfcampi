@@ -113,8 +113,11 @@ void loop() {
       SleepyPi.enablePiPower(true);
       delay(120000); //hold for boot
       while(SleepyPi.checkPiStatus(false)){
+        digitalWrite(LED_PIN,LOW);
         Serial.println("Pi is still running"); 
         delay(10000); //checking status every 10sec
+        digitalWrite(LED_PIN,HIGH);
+        delay(400);
       }
       Serial.println("Turning power off!");
       delay(10000); //Give it time to shut down before cutting power
