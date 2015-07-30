@@ -40,6 +40,9 @@ if [ $isWorkingHour = 1 ]; then
 
   # upload animated gif to FTP
   ./uploadToFTP.sh $animatedFile
+
+  # print current date time
+  date
 else
   # surfcampi does nothing for 1min in case we want to ssh it
   echo "surfcampi does not have anything to do. Waiting doing nothing for a 1min."
@@ -49,9 +52,6 @@ fi
 # disconnect from 3G
 #echo "disconnecting from 3G"
 #sudo ./sakis3g disconnect
-
-# print current date time
-date
 
 # shutdown surfcampi
 sudo halt
