@@ -71,6 +71,16 @@ void loop() {
   // Do something here
   // Example: Read sensor, data logging, data transmission.
   digitalWrite(LED_PIN,HIGH);		// Sleepy pi awake
+
+  // check battery state
+  // read the input on analog pin 6
+  int batteryValue = analogRead(A6);
+  // Convert the analog reading (which goes from 0 - 1023) to a voltage (0 - 5V):
+  float batteryVoltage = batteryValue * (5.0 / 1023.0);
+  Serial.print("Battery voltage is ");
+  Serial.print(batteryVoltage);
+  Serial.println("V out of 5");
+
   if (RTC.readTime(tm)) {
     piIsRunning = SleepyPi.checkPiStatus(false);
     if (piIsRunning == true) {
@@ -112,7 +122,7 @@ void loop() {
       Serial.println("Turning Pi on!"); 
       SleepyPi.enablePiPower(true);
       delay(120000); //hold for boot
-      while(SleepyPi.checkPiStatus(false)){
+      while(SleepyPi.checkPiStatus(true)){
         digitalWrite(LED_PIN,LOW);
         Serial.println("Pi is still running"); 
         delay(10000); //checking status every 10sec
@@ -120,11 +130,9 @@ void loop() {
         delay(400);
       }
       Serial.println("Turning power off!");
-      delay(10000); //Give it time to shut down before cutting power
-      SleepyPi.enablePiPower(false);
     } else if (piIsRunning == false && piShouldBeOn == false) {
       Serial.println("Force power off. Going back to sleep");
-      SleepyPi.enablePiPower(false); //we make sure power is off
+      SleepyPi.piShutDown(true); //we make sure power is off
     } else {
       Serial.println("All good. Going back to sleep");
     }
