@@ -132,7 +132,7 @@ void loop() {
       Serial.println("Turning power off!");
     } else if (piIsRunning == false && piShouldBeOn == false) {
       Serial.println("Force power off. Going back to sleep");
-      SleepyPi.piShutDown(true); //we make sure power is off
+      SleepyPi.piShutdown(true); //we make sure power is off
     } else {
       Serial.println("All good. Going back to sleep");
     }
