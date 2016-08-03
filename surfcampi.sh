@@ -44,9 +44,9 @@ if [ $isWorkingHour = 1 ]; then
   # print current date time
   date
 else
-  # surfcampi does nothing for 1min in case we want to ssh it
-  echo "surfcampi does not have anything to do. Waiting doing nothing for a 1min."
-  sleep 60
+  # surfcampi does nothing for 2min in case we want to ssh it
+  echo "surfcampi does not have anything to do. Waiting doing nothing for a 2min."
+  sleep 120
 fi
 
 # disconnect from 3G
