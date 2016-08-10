@@ -7,10 +7,11 @@ echo " "
 #sudo ./sakis3g connect
 
 # set RTC time to internet time if connection
-./setTime.sh
+#./setTime.sh
 
 # print current date time
-date
+date +"%a %d %b %Y %T %Z"
+hwclock -r
 
 # update scripts from github repo
 git pull
