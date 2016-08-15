@@ -10,7 +10,7 @@ echo " "
 #./setTime.sh
 
 # print current date time
-date +"%a %d %b %Y %T %Z"
+date +"%a %b %d %T %Y %Z"
 hwclock -r
 
 # update scripts from github repo
@@ -43,7 +43,7 @@ if [ $isWorkingHour = 1 ]; then
   ./uploadToFTP.sh $animatedFile
 
   # print current date time
-  date +"%a %d %b %Y %T %Z"
+  date +"%a %b %d %T %Y %Z"
 else
   # surfcampi does nothing for 2min in case we want to ssh it
   echo "surfcampi does not have anything to do. Waiting doing nothing for a 2min."
