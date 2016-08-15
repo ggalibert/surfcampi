@@ -43,7 +43,7 @@ if [ $isWorkingHour = 1 ]; then
   ./uploadToFTP.sh $animatedFile
 
   # print current date time
-  date
+  date +"%a %d %b %Y %T %Z"
 else
   # surfcampi does nothing for 2min in case we want to ssh it
   echo "surfcampi does not have anything to do. Waiting doing nothing for a 2min."
